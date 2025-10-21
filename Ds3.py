@@ -336,7 +336,7 @@ def plot_correlation_heatmap(corr_matrix):
     
     for col in matrix_to_plot.columns:
         if '(1-5)' in col:
-             clean_cols[col] = col.replace('skala_', '').replace('(1-5)', '').title()
+              clean_cols[col] = col.replace('skala_', '').replace('(1-5)', '').title()
         else:
             clean_cols[col] = col
             
@@ -524,9 +524,9 @@ def create_overview_kpis(df_filtered, stats_df):
     with col4:
         # Menampilkan Metrik Paling Kritis
         st.metric(label=f"Metrik Paling Kritis ({worst_metric['Mean']:.2f})", 
-                   value=worst_metric['Question'],
-                   delta=f"Positive: {worst_metric['% Positive (4-5)']:.1f}%",
-                   delta_color="inverse")
+                  value=worst_metric['Question'],
+                  delta=f"Positive: {worst_metric['% Positive (4-5)']:.1f}%",
+                  delta_color="inverse")
     
     st.markdown("---") # Garis pemisah setelah baris KPI
 
@@ -623,17 +623,18 @@ def main():
         avg_score = stats_df['Mean'].mean()
         
         if not rit_df.empty and not rit_df['Correlation'].isnull().all():
-             high_corr_metric = METRIC_MAPPING.get(rit_df.sort_values(by='Correlation', key=abs, ascending=False).iloc[0]['Variable 1'], "Metrik Utama")
+            high_corr_metric = METRIC_MAPPING.get(rit_df.sort_values(by='Correlation', key=abs, ascending=False).iloc[0]['Variable 1'], "Metrik Utama")
         else:
-             high_corr_metric = "Data tidak tersedia"
+            high_corr_metric = "Data tidak tersedia"
 
+        # --- KODE DIPERBAIKI (TAB 0) ---
         st.markdown(f"""
         <div class="lead-text">
-        ### 👋 Insight Awal: Kepuasan Kantin UPN Veteran Jatim
-        <p>Kantin merupakan pusat vital bagi mahasiswa UPN Veteran Jatim, bukan hanya sebagai tempat makan, tetapi juga area interaksi sosial dan istirahat. Mengingat pentingnya kantin dalam pengalaman kampus, kualitas layanan dan produknya secara langsung memengaruhi kesejahteraan dan kepuasan harian mahasiswa.</p>
-        <p>Dari **{len(df_filtered)} responden**, ditemukan bahwa tingkat kepuasan rata-rata kantin saat ini berada di skor **{avg_score:.2f}/5.0**. 
-        Analisis Item-Rest Correlation menunjukkan bahwa metrik **{high_corr_metric}** memiliki dampak korelasi internal tertinggi, menjadikannya faktor utama dalam mendefinisikan kepuasan responden secara keseluruhan.</p>
-        <p>Dashboard ini menyajikan analisis mendalam untuk mengidentifikasi area yang membutuhkan peningkatan strategis. Temukan faktor apa yang paling memengaruhi persepsi mahasiswa!</p>
+            <h3>👋 Insight Awal: Kepuasan Kantin UPN Veteran Jatim</h3>
+            <p>Kantin merupakan pusat vital bagi mahasiswa UPN Veteran Jatim, bukan hanya sebagai tempat makan, tetapi juga area interaksi sosial dan istirahat. Mengingat pentingnya kantin dalam pengalaman kampus, kualitas layanan dan produknya secara langsung memengaruhi kesejahteraan dan kepuasan harian mahasiswa.</p>
+            <p>Dari <strong>{len(df_filtered)} responden</strong>, ditemukan bahwa tingkat kepuasan rata-rata kantin saat ini berada di skor <strong>{avg_score:.2f}/5.0</strong>. 
+            Analisis Item-Rest Correlation menunjukkan bahwa metrik <strong>{high_corr_metric}</strong> memiliki dampak korelasi internal tertinggi, menjadikannya faktor utama dalam mendefinisikan kepuasan responden secara keseluruhan.</p>
+            <p>Dashboard ini menyajikan analisis mendalam untuk mengidentifikasi area yang membutuhkan peningkatan strategis. Temukan faktor apa yang paling memengaruhi persepsi mahasiswa!</p>
         </div>
         """, unsafe_allow_html=True)
         st.markdown("---")
@@ -696,9 +697,11 @@ def main():
                 fig = plot_numeric_distribution(df_filtered, [selected_continuous], 'histogram') 
                 if fig:
                     st.plotly_chart(fig, use_container_width=True, key="hist_tab1")
+                
+                # --- KODE DIPERBAIKI (TAB 1 - HISTOGRAM) ---
                 st.markdown(f"""
                     <p style='font-size: 15px;'>
-                    Histogram menunjukkan frekuensi responden berdasarkan nilai **{selected_continuous}**. 
+                    Histogram menunjukkan frekuensi responden berdasarkan nilai <strong>{selected_continuous}</strong>. 
                     Ini penting untuk melihat apakah data terpusat, menyebar, atau memiliki pencilan (outliers).
                     </p>
                     """, unsafe_allow_html=True)
@@ -716,9 +719,11 @@ def main():
                 fig = plot_categorical(df_filtered, selected_likert)
                 if fig:
                     st.plotly_chart(fig, use_container_width=True, key="bar_tab1")
+                
+                # --- KODE DIPERBAIKI (TAB 1 - LIKERT BAR) ---
                 st.markdown(f"""
                     <p style='font-size: 15px;'>
-                    Bar chart ini memvisualisasikan distribusi respons skor (1 sampai 5) untuk **{METRIC_MAPPING.get(selected_likert, selected_likert)}**. 
+                    Bar chart ini memvisualisasikan distribusi respons skor (1 sampai 5) untuk <strong>{METRIC_MAPPING.get(selected_likert, selected_likert)}</strong>. 
                     Mode (skor yang paling sering dipilih) menunjukkan konsensus atau kecenderungan sentimen responden terhadap metrik tersebut.
                     </p>
                     """, unsafe_allow_html=True)
@@ -747,9 +752,11 @@ def main():
                     fig = plot_categorical(df_filtered, selected_cat)
                     if fig:
                         st.plotly_chart(fig, use_container_width=True, key="cat_bar_tab1")
+                
+                # --- KODE DIPERBAIKI (TAB 1 - CATEGORICAL) ---
                 st.markdown(f"""
                     <p style='font-size: 15px;'>
-                    Tabel dan bar chart ini menunjukkan komposisi responden berdasarkan variabel kategori (**{selected_cat}**). 
+                    Tabel dan bar chart ini menunjukkan komposisi responden berdasarkan variabel kategori (<strong>{selected_cat}</strong>). 
                     Ini membantu memahami segmentasi data yang sedang dianalisis.
                     </p>
                     """, unsafe_allow_html=True)
@@ -767,9 +774,11 @@ def main():
                 st.subheader("Correlation Heatmap (Spearman Rank)")
                 fig = plot_correlation_heatmap(corr_matrix)
                 st.plotly_chart(fig, use_container_width=True, key="heatmap_tab2")
+                
+                # --- KODE DIPERBAIKI (TAB 2 - HEATMAP) ---
                 st.markdown("""
                     <p style='font-size: 15px;'>
-                    Heatmap menunjukkan korelasi Spearman ($ \\rho $) antara semua metrik kepuasan (tanpa skor agregat). 
+                    Heatmap menunjukkan korelasi Spearman (&rho;) antara semua metrik kepuasan (tanpa skor agregat). 
                     Warna Biru Kuat menunjukkan korelasi positif tinggi (misal: Jika Rasa naik, Kenyamanan juga cenderung naik).
                     </p>
                     """, unsafe_allow_html=True)
@@ -825,11 +834,12 @@ def main():
             
             top_rit_metric_name = METRIC_MAPPING.get(rit_df.sort_values(by='Correlation', key=abs, ascending=False).iloc[0]['Variable 1'], "Metrik Utama")
             
+            # --- KODE DIPERBAIKI (TAB 2 - IMPACT) ---
             st.markdown(f"""
                 <p style='font-size: 15px;'>
                 Bar chart Item-Rest Correlation (RIT) ini mengukur seberapa kuat masing-masing metrik berkontribusi 
-                terhadap konsistensi internal metrik kepuasan total. Metrik dengan RIT tertinggi (**{top_rit_metric_name}**)
-                adalah faktor **paling berpengaruh** terhadap sentimen kepuasan keseluruhan.
+                terhadap konsistensi internal metrik kepuasan total. Metrik dengan RIT tertinggi (<strong>{top_rit_metric_name}</strong>)
+                adalah faktor <strong>paling berpengaruh</strong> terhadap sentimen kepuasan keseluruhan.
                 </p>
                 """, unsafe_allow_html=True)
             
@@ -841,10 +851,12 @@ def main():
             rit_summary_df = rit_summary_df[['Metric', 'Correlation', 'p_value', 'n']].rename(columns={'Correlation': 'RIT Rho', 'p_value': 'P-Value', 'n': 'N'})
             
             st.dataframe(rit_summary_df.sort_values('RIT Rho', ascending=False).round(3), use_container_width=True)
+            
+            # --- KODE DIPERBAIKI (TAB 2 - RIT TABLE) ---
             st.markdown("""
                 <p style='font-size: 15px;'>
-                Tabel ini menyajikan nilai Item-Rest Correlation ($\rho$) yang digunakan untuk menilai validitas dan reliabilitas internal item. 
-                Nilai $\\rho$ yang lebih tinggi menunjukkan item tersebut berkorelasi kuat dengan sisa dari skala tersebut.
+                Tabel ini menyajikan nilai Item-Rest Correlation (&rho;) yang digunakan untuk menilai validitas dan reliabilitas internal item. 
+                Nilai &rho; yang lebih tinggi menunjukkan item tersebut berkorelasi kuat dengan sisa dari skala tersebut.
                 </p>
                 """, unsafe_allow_html=True)
             
@@ -926,10 +938,12 @@ def main():
                 fig_pie = plot_single_pie_chart(pie_df, selected_question)
                 if fig_pie:
                     st.plotly_chart(fig_pie, use_container_width=True, key="pie_tab3")
+                
+                # --- KODE DIPERBAIKI (TAB 3 - PIE) ---
                 st.markdown(f"""
                     <p style='font-size: 15px;'>
                     Pie chart menunjukkan proporsi responden yang memberikan skor Puas (Biru, 4-5) 
-                    dibandingkan Netral/Tidak Puas (Merah, 1-3) untuk metrik **{selected_question}**. 
+                    dibandingkan Netral/Tidak Puas (Merah, 1-3) untuk metrik <strong>{selected_question}</strong>. 
                     Target perbaikan harus fokus pada metrik dengan proporsi 'Neutral/Negative' (Merah) yang besar.
                     </p>
                     """, unsafe_allow_html=True)
